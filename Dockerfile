@@ -1,4 +1,4 @@
-FROM fukamachi/sbcl:latest-ubuntu
+FROM clfoundation/sbcl:2.1.5-buster
 
 WORKDIR /opt/
 

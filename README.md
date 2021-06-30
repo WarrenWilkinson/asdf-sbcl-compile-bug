@@ -6,6 +6,7 @@ In SBCL 2.0.9...
 
 Now when you compile broken.lisp you get:
 
+    0: (COMPILE-FILE "broken.lisp" :OUTPUT-FILE "/tmp/dontcare.fasl")
     (compile-file "broken.lisp" :output-file "/tmp/dontcare.fasl")
     ; compiling file "/home/wwilkinson/typhon-user2/broke/broken.lisp" (written 30 JUN 2021 09:55:27 AM):
     ; processing (DEFPACKAGE :BROKEN ...)
@@ -31,6 +32,7 @@ Now when you compile broken.lisp you get:
     
     ; wrote /tmp/dontcare.fasl
     ; compilation finished in 0:00:00.004
+    0: COMPILE-FILE returned #P"/tmp/dontcare.fasl" T T
     #P"/tmp/dontcare.fasl"
     
     T
@@ -38,13 +40,27 @@ Now when you compile broken.lisp you get:
     T
 
 and it's repeatable. It always returns true as 2nd and 3rd values and
-always prints those messages about the error.  But once you load the
-system, this behavior is changed. Do this:
+always prints those messages about the error.  But with load-system,
+compile-file no longer detects the issue (so ASDF doesn't throw an error).
 
     (asdf:load-system :broken)
+    0: (COMPILE-FILE #P"/opt/broken.lisp" :OUTPUT-FILE #P"/root/.cache/common-lisp/sbcl-2.1.5-linux-x64/opt/broken-tmpGHU3ALSV.fasl" :EXTERNAL-FORMAT :UTF-8)
+	; compiling file "/opt/broken.lisp" (written 30 JUN 2021 08:38:47 PM):
+    ; processing (DEFPACKAGE :BROKEN ...)
+    ; processing (IN-PACKAGE :BROKEN)
+    ; processing (LET (#) ...)
+    ; processing (DEFUN GET-MY-VALUE ...)
+
+    ; wrote /root/.cache/common-lisp/sbcl-2.1.5-linux-x64/opt/broken-tmpGHU3ALSV.fasl
+    ; compilation finished in 0:00:00.000
+      0: COMPILE-FILE returned
+           #P"/root/.cache/common-lisp/sbcl-2.1.5-linux-x64/opt/broken-tmpGHU3ALSV.fasl"
+           NIL
+           NIL
 
 And from now on, compiling the file doesn't return errors.
 
+    0: (COMPILE-FILE "broken.lisp" :OUTPUT-FILE "/tmp/dontcare.fasl")
     (compile-file "broken.lisp" :output-file "/tmp/dontcare.fasl")
     ; compiling file "/home/wwilkinson/typhon-user2/broke/broken.lisp" (written 30 JUN 2021 09:55:27 AM):
     ; processing (DEFPACKAGE :BROKEN ...)
@@ -54,6 +70,7 @@ And from now on, compiling the file doesn't return errors.
     
     ; wrote /tmp/blahdontcare.fasl
     ; compilation finished in 0:00:00.003
+    0: COMPILE-FILE returned #P"/tmp/dontcare.fasl" NIL NIL
     #P"/tmp/blahdontcare.fasl"
     
     NIL
