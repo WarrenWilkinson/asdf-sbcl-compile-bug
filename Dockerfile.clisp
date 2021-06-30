@@ -1,4 +1,4 @@
-FROM clfoundation/sbcl:2.1.5-buster
+FROM clfoundation/clisp
 
 WORKDIR /opt/
 

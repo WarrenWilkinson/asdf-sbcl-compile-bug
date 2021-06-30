@@ -1,5 +1,6 @@
-(require :asdf)
-(trace sb-c::compile-file)
+(require "asdf")
+(trace #+sbcl sb-c::compile-file
+       #+clisp compile-file)
 (asdf:initialize-source-registry `(:source-registry
-                                   (:directory ,*default-pathname-defaults*)
+                                   (:directory #p"/opt/")
                                    :inherit-configuration))
